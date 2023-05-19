@@ -60,14 +60,22 @@ if __name__ == "__main__":
 
         with open('model.pt', 'wb') as f:
             save(clf.state_dict(), f)
-    
+
     with open('model.pt','rb') as f:
         clf.load_state_dict(load(f))
-    
+
     img = Image.open('img_1.jpg')
     img_tensor = ToTensor()(img).unsqueeze(0).to('cuda')
-    print(torch.argmax(clf(img_tensor)))
+    prediction = torch.argmax(clf(img_tensor))
+    # Extract the prediction from output
+    for index, char in enumerate(str(prediction)):
+        if char.isdigit():
+            print('The model thinks this number is:', char)
+            break
     img = Image.open('img_5.jpg')
     img_tensor = ToTensor()(img).unsqueeze(0).to('cuda')
-    print(torch.argmax(clf(img_tensor)))
+    for index, char in enumerate(str(prediction)):
+        if char.isdigit():
+            print('The model thinks this number is:', char)
+            break
 
